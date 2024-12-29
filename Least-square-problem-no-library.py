@@ -1,3 +1,5 @@
+import pprint
+
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.linalg import svd
@@ -11,12 +13,6 @@ class Regression:
     def compute_svd_solution(A, B):
         # Compute SVD of matrix A without libraries
         U, singular_values, Vt = calculate_svd(A)
-
-        # print different components
-        print("U: ", U)
-        print("Singular array", singular_values)
-        print("V^{T}", Vt)
-
         # Construct the diagonal matrix of singular values
         S = np.diag(singular_values)
         # Compute the pseudo-inverse of S
@@ -29,7 +25,7 @@ class Regression:
         X = A_pseudo_inv @ B
 
         print("Least squares solution:")
-        print(X)
+        pprint.pprint(X)
         return X
 
     @staticmethod
@@ -63,8 +59,8 @@ def main():
     y_pred = r.predict(A, x)
 
     # Print the results
-    print(f"Solution (x):\n{x}")
-    print(f"Predicted values (Ax):\n{y_pred}")
+    print(f"Predicted values (Ax)")
+    pprint.pprint(y_pred)
 
     # Print the regression equation
     print(f"Regression Equation: y = {x[0][0]:.2f}x1 + {x[1][0]:.2f}")

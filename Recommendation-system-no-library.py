@@ -1,3 +1,5 @@
+import pprint
+
 import numpy as np
 
 from Calculate_SVD import calculate_svd
@@ -11,10 +13,6 @@ def recommend(matrix, rank):
     U = U[:, :rank]
     S = np.diag(S[:rank])
     Vt = Vt[:rank, :]
-
-    print("U: ", U)
-    print("Singular array", S)
-    print("V^{T}", Vt)
 
     # Reconstruct the matrix from U, S, and Vt
     reconstructed_matrix = np.dot(np.dot(U, S), Vt)
@@ -38,7 +36,7 @@ predicted_matrix = recommend(A, rank)
 
 # Display the original matrix and the predicted ratings (reconstructed matrix)
 print("Original Matrix A:")
-print(A)
+pprint.pprint(A)
 
 print("\nReconstructed Matrix (Predicted Ratings):")
-print(predicted_matrix)
+pprint.pprint(predicted_matrix)

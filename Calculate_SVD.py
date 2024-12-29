@@ -1,4 +1,5 @@
 import numpy as np
+import pprint
 
 def calculate_svd(M):
     DBL_EPSILON = 1.0e-15  # approximately
@@ -118,7 +119,6 @@ def calculate_svd(M):
 # -----------------------------------------------------------
 
 def main():
-    print("\nBegin SVD from scratch Python ")
     np.set_printoptions(precision=4, suppress=True,
                         floatmode='fixed')
 
@@ -134,28 +134,16 @@ def main():
     #   [5, 0, 2]], dtype=np.float64)
 
     print("\nSource matrix: ")
-    print(A)
+    pprint.pprint(A)
 
     U, s, Vh = calculate_svd(A)
 
-    print("\nU = ")
-    print(U)
-    print("\ns = ")
-    print(s)
-    print("\nVh = ")
-    print(Vh)
-
-    U, s, Vh = np.linalg.svd(A, full_matrices=True)
-    print("\nUsing linalg.svd(): ")
-    print("\nU = ")
-    print(U)
-    print("\ns = ")
-    print(s)
-    print("\nVh = ")
-    print(Vh)
-
-    print("\nEnd demo ")
-
+    print("\nU Matrix: ")
+    pprint.pprint(U)
+    print("\ns Matrix: ")
+    pprint.pprint(s)
+    print("\nVh Matrix: ")
+    pprint.pprint(Vh)
 
 if __name__ == "__main__":
     main()

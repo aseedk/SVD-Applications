@@ -1,3 +1,5 @@
+import pprint
+
 import numpy as np
 from skimage import color, io
 from skimage.transform import resize
@@ -11,7 +13,7 @@ from Calculate_SVD import calculate_svd
 def compress_matrix_no_library(matrix):
     # Display the original matrix
     print("Original Matrix:")
-    print(matrix)
+    pprint.pprint(matrix)
 
     # Display the original image
     plt.figure(figsize=(10, 8))
@@ -41,7 +43,7 @@ def compress_matrix_no_library(matrix):
         plt.axis('off')
         # Output the compressed matrix after each rank
         print(f"\nMatrix after Rank {rank} compression:")
-        print(compressed_matrix)
+        pprint.pprint(compressed_matrix)
 
         # calculate error by comparing  original matrix and compressed matrix
         error = np.linalg.norm(matrix - compressed_matrix)
