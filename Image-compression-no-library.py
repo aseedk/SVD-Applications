@@ -4,27 +4,7 @@ from skimage.transform import resize
 
 import matplotlib.pyplot as plt
 
-# Function to compute SVD without libraries
-def compute_svd(matrix):
-    """Compute SVD of a matrix without using libraries."""
-    # Compute eigenvalues and eigenvectors
-    AAT = np.dot(matrix, matrix.T)  # Compute A * A^T
-    ATA = np.dot(matrix.T, matrix)  # Compute A^T * A
-
-    U_eigenvalues, U = np.linalg.eigh(AAT)  # Compute eigenvectors for AAT
-    V_eigenvalues, V = np.linalg.eigh(ATA)  # Compute eigenvectors for ATA
-
-    # Sort eigenvalues and eigenvectors in descending order
-    U_indices = np.argsort(U_eigenvalues)[::-1]
-    V_indices = np.argsort(V_eigenvalues)[::-1]
-
-    U = U[:, U_indices]
-    V = V[:, V_indices]
-
-    # Compute singular values
-    singular_values = np.sqrt(np.maximum(U_eigenvalues[U_indices], 0))  # Ensure no negative values
-
-    return U, singular_values, V.T
+from Calculate_SVD import calculate_svd
 
 
 # Function to compress a matrix without library-based SVD
@@ -41,7 +21,7 @@ def compress_matrix_no_library(matrix):
     plt.axis('off')
 
     # Perform custom SVD
-    U, S, Vt = compute_svd(matrix)
+    U, S, Vt = calculate_svd(matrix)
 
     # Define the ranks for compression
     ranks = [2, 1]  # Since it's a 3x2 matrix, we will consider ranks 2 and 1
@@ -63,8 +43,13 @@ def compress_matrix_no_library(matrix):
         print(f"\nMatrix after Rank {rank} compression:")
         print(compressed_matrix)
 
+        # calculate error by comparing  original matrix and compressed matrix
+        error = np.linalg.norm(matrix - compressed_matrix)
+        print(f"Error after Rank {rank} compression: {error}")
+
     plt.tight_layout()
     plt.show()
+
 
 
 # Example usage
@@ -73,6 +58,10 @@ def compress_matrix_no_library(matrix):
 # Load the image and convert to grayscale
 #matrix = color.rgb2gray(io.imread('test_data/Image-Compression.jpg'))
 #matrix = resize(matrix, (matrix.shape[0] // 2, matrix.shape[1] // 2), anti_aliasing=True)
-matrix = np.array([[2, 1], [1, 0], [0, 1]])  # Your given matrix
+matrix = np.array([
+    [2, 1],
+    [1, 0],
+    [0, 1]
+], dtype=np.float64)
 compress_matrix_no_library(matrix)
 
