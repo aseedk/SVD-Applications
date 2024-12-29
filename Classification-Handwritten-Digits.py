@@ -1,3 +1,5 @@
+import pprint
+
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -19,7 +21,7 @@ scaler = StandardScaler()
 X_scaled = scaler.fit_transform(matrix)
 
 # Split into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X_scaled, labels, test_size=0.33, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, labels, test_size=1, random_state=42)
 
 # Compute mean images and SVD for each label class
 mean_images = {}
@@ -29,6 +31,12 @@ for label in np.unique(y_train):
     label_images = X_train[y_train == label]
     mean_image = np.mean(label_images, axis=0)
     U, s, Vh = calculate_svd(mean_image.reshape(-1, 1))  # Reshaped for SVD computation
+    print("\nU Matrix: ")
+    pprint.pprint(U)
+    print("\ns Matrix: ")
+    pprint.pprint(s)
+    print("\nVh Matrix: ")
+    pprint.pprint(Vh)
     mean_images[label] = mean_image
     svd_components[label] = (U, s, Vh)
 
@@ -36,15 +44,21 @@ for label in np.unique(y_train):
 def classify_point(point):
     min_error = float('inf')
     predicted_label = None
-    for label in np.unique(y_train):
-        U, s, Vh = svd_components[label]
+    for label_inner in np.unique(y_train):
+        U_inner, s_inner, Vh_inner = svd_components[label_inner]
+        print("\nU Matrix: ")
+        pprint.pprint(U_inner)
+        print("\ns Matrix: ")
+        pprint.pprint(s_inner)
+        print("\nVh Matrix: ")
+        pprint.pprint(Vh_inner)
         # Project the point onto the subspace
-        projection = U @ np.diag(s) @ Vh
+        projection = U_inner @ np.diag(s_inner) @ Vh_inner
         # Compute reconstruction error
         error = np.linalg.norm(point.reshape(-1, 1) - projection)
         if error < min_error:
             min_error = error
-            predicted_label = label
+            predicted_label = label_inner
     return predicted_label
 
 # Predict on the test set
